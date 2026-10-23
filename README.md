@@ -3,7 +3,9 @@ Aplikasi web satu file untuk belajar Matematika Teknik Lanjut dalam bahasa Indon
 > Dibuat untuk mahasiswa teknik yang ingin benar-benar *memahami* rumus, bukan sekadar menghafal. Setiap rumus dilengkapi cara mengucapkan, arti tiap simbol, asal-usulnya, contoh angka, dan visualisasi interaktif.
 Fitur
 Materi dan penjelasan
-11 modul dengan ringkasan, rumus (dirender dengan KaTeX), contoh soal, kesalahan umum, dan aplikasi teknik.
+12 modul (11 materi inti + Aerospace & Astrodinamika) dengan ringkasan, rumus (dirender dengan KaTeX), contoh soal, kesalahan umum, dan aplikasi teknik.
+Diagram kartesius untuk setiap rumus (59 diagram) yang menggambarkan arti rumus secara visual, lengkap dengan keterangan cara membacanya.
+Studi kasus teknik berangka di tiap modul, dari data sampai hasil.
 Bedah rumus lengkap untuk 59 rumus: cara mengucapkan kata demi kata, arti tiap bagian, dan contoh angka yang bisa dicek sendiri.
 Kamus simbol per modul dan halaman pencarian simbol gabungan (∂, ∇, ∮, Σ, λ, ζ, ωₙ, ℒ, σ, dan lainnya).
 Asal-usul rumus: penurunan singkat, misalnya mengapa dA = r dr dθ atau mengapa ℒ{f′} = sF(s) − f(0).
@@ -16,7 +18,7 @@ Visualisasi 3D (11 scene, satu per modul): permukaan dan bidang singgung, medan 
 Aerospace 3D: orbit Kepler (persamaan Kepler diselesaikan metode Newton), transfer Hohmann, dan sikap pesawat dengan matriks rotasi, lengkap dengan rumus kunci dan soal latihan.
 Grafik dasar dengan satu slider (deret Fourier, respons orde-2, Taylor, Euler vs RK4, pole, aliasing).
 Alat belajar
-Quiz per modul (60 soal, pilihan ganda dan numerik) dengan pembahasan, plus mode ujian bertimer.
+Quiz per modul (72 soal, pilihan ganda dan numerik) dengan pembahasan, plus mode ujian bertimer.
 Alur Belajar: urutan modul yang disarankan, prasyarat, bar progres, dan peringatan bila prasyarat belum dikuasai.
 Ekspor dan impor progres ke file `.json` untuk cadangan atau pindah perangkat.
 Flashcard rumus dengan sisi belakang berisi cara membaca; tandai "Masih sulit" atau "Sudah hafal" agar kartu sulit lebih sering muncul.
@@ -37,6 +39,7 @@ Daftar modul
 9	Metode Numerik
 10	Probabilitas & Statistik
 11	Optimasi
+12	Aerospace & Astrodinamika
 Cara menjalankan
 Lokal
 Unduh atau clone repositori ini.
@@ -101,7 +104,7 @@ Menambah scene visualisasi 2D/3D baru
 Memperbaiki salah ketik atau kesalahan rumus
 Cara berkontribusi: fork repositori, buat branch baru, lakukan perubahan, lalu ajukan pull request dengan deskripsi singkat. Untuk koreksi rumus, sertakan referensinya.
 Rencana pengembangan
-[x] Bank soal quiz di semua modul (60 soal)
+[x] Bank soal quiz di semua modul (72 soal)
 [ ] Perbanyak bank soal menjadi sekitar 10 per modul
 [ ] Studi kasus teknik berangka satu per modul
 [x] Panduan urutan belajar dan prasyarat per modul
