@@ -16,7 +16,9 @@ Visualisasi 3D (11 scene, satu per modul): permukaan dan bidang singgung, medan 
 Aerospace 3D: orbit Kepler (persamaan Kepler diselesaikan metode Newton), transfer Hohmann, dan sikap pesawat dengan matriks rotasi, lengkap dengan rumus kunci dan soal latihan.
 Grafik dasar dengan satu slider (deret Fourier, respons orde-2, Taylor, Euler vs RK4, pole, aliasing).
 Alat belajar
-Quiz per modul dengan pembahasan.
+Quiz per modul (60 soal, pilihan ganda dan numerik) dengan pembahasan, plus mode ujian bertimer.
+Alur Belajar: urutan modul yang disarankan, prasyarat, bar progres, dan peringatan bila prasyarat belum dikuasai.
+Ekspor dan impor progres ke file `.json` untuk cadangan atau pindah perangkat.
 Flashcard rumus dengan sisi belakang berisi cara membaca; tandai "Masih sulit" atau "Sudah hafal" agar kartu sulit lebih sering muncul.
 Cheat sheet dengan pencarian, bookmark, dan tombol Cetak / simpan PDF.
 Halaman Konstanta & Tabel: konstanta fisika, awalan SI, konversi satuan, dan tabel pasangan Laplace.
@@ -99,9 +101,10 @@ Menambah scene visualisasi 2D/3D baru
 Memperbaiki salah ketik atau kesalahan rumus
 Cara berkontribusi: fork repositori, buat branch baru, lakukan perubahan, lalu ajukan pull request dengan deskripsi singkat. Untuk koreksi rumus, sertakan referensinya.
 Rencana pengembangan
-[ ] Bank soal quiz untuk semua modul (target sekitar 10 soal per modul)
+[x] Bank soal quiz di semua modul (60 soal)
+[ ] Perbanyak bank soal menjadi sekitar 10 per modul
 [ ] Studi kasus teknik berangka satu per modul
-[ ] Panduan urutan belajar dan prasyarat per modul
+[x] Panduan urutan belajar dan prasyarat per modul
 [ ] Topik tambahan: distribusi binomial dan Poisson, uji hipotesis, kondisi KKT, integral kontur dan rumus integral Cauchy
 [x] Visualisasi 2D dan 3D untuk setiap modul
 [x] Bedah rumus lengkap, kamus simbol, asal-usul rumus
