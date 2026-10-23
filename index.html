@@ -468,6 +468,52 @@ if(kd==='3'){cv.onpointerdown=e=>{cv.setPointerCapture(e.pointerId);cv._d=[e.cli
 (function lp(now){if(EM.tok!==tk||!document.body.contains(cv))return;const dt=Math.min(.1,(now-last)/1000),r=cv.getBoundingClientRect(),dpr=window.devicePixelRatio||1;last=now;if(r.width!==W||r.height!==H){W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr}g.setTransform(dpr,0,0,dpr,0,0);g.fillStyle='#070b24';g.fillRect(0,0,W,H);let t;
 if(kd==='2')t=S.run(g,W,H,V.v[key],st,dt);else{const h=mk(g,W,H,S.sc*.85);if(S.ax!==0){const L=3.5;h.ln([-L,0,0],[L,0,0],'#47556988',1);h.ln([0,-L,0],[0,L,0],'#47556988',1);h.ln([0,0,-L],[0,0,L],'#47556988',1)}t=S.run(h,V.v[key],st,dt,g)}
 const o=document.getElementById('emo');if(o)o.innerHTML=t;requestAnimationFrame(lp)})(last)}
+
+/* ===== BANK SOAL TAMBAHAN: [modul, tingkat, soal, pilihan|null, jawaban, pembahasan] ===== */
+Q.push(
+[0,'Easy','Hitung ∂f/∂x untuk f = x²y + y³ di (2, 1).',null,4,'f_x = 2xy = 2·2·1 = 4 (y dianggap konstan).'],
+[0,'Easy','Elemen luas dA pada koordinat polar adalah…',['dr dθ','r dr dθ','r² dr dθ','dr / r dθ'],1,'Potongan polar berukuran dr kali busur r·dθ, jadi dA = r dr dθ.'],
+[0,'Medium','Gunakan koordinat polar: hitung ∬ dA pada lingkaran jari-jari 2 (jawab dalam desimal).',null,12.57,'∫₀^{2π}∫₀² r dr dθ = 2π·2 = 4π ≈ 12,57.'],
+[0,'Medium','Koefisien suku x³ pada deret Taylor sin x di sekitar 0 adalah…',null,-.1667,'sin x = x − x³/3! + … sehingga koefisien x³ = −1/6 ≈ −0,1667.'],
+[0,'Medium','Di titik kritis, D = fₓₓ·f_yy − fₓᵧ² > 0 dan fₓₓ > 0 berarti…',['minimum lokal','maksimum lokal','titik pelana','tidak dapat disimpulkan'],0,'D > 0 dengan fₓₓ > 0: permukaan melengkung ke atas, minimum lokal.'],
+[0,'Hard','Hitung ∬ e^{−(x²+y²)} dA di seluruh bidang (desimal).',null,3.1416,'Polar: ∫₀^{2π}∫₀^∞ e^{−r²}r dr dθ = 2π·(1/2) = π ≈ 3,1416.'],
+[5,'Easy','Persamaan uₜ = α·uₓₓ adalah persamaan…',['panas (difusi)','gelombang','Laplace','Poisson'],0,'Turunan pertama terhadap waktu dan kedua terhadap ruang: persamaan panas.'],
+[5,'Easy','Persamaan Laplace ∇²u = 0 menggambarkan…',['keadaan tunak (tak bergantung waktu)','gelombang merambat','difusi panas transien','getaran teredam'],0,'Tidak ada turunan waktu: keadaan tunak, nilai di titik = rata-rata tetangganya.'],
+[5,'Medium','Dawai L = 0,5 m dengan kecepatan gelombang c = 100 m/s. Frekuensi dasar f₁ (Hz)?',null,100,'f₁ = c/(2L) = 100/(2·0,5) = 100 Hz.'],
+[5,'Medium','Pada separation of variables untuk uₜ = α·uₓₓ, bagian waktu yang meluruh berbentuk…',['T = e^{−αλt}','T = cos(λt)','T = t^λ','T = e^{+αλt}'],0,'T′ = −αλT memberi T = e^{−αλt}, meluruh untuk λ > 0.'],
+[5,'Medium','Mode ke-n batang panas meluruh dengan laju αn². Untuk α = 0,1 dan n = 3, lajunya?',null,.9,'αn² = 0,1·9 = 0,9.'],
+[5,'Hard','Syarat batas ujung terisolasi (tidak ada aliran panas) adalah…',['uₓ = 0','u = 0','uₜ = 0','uₓₓ = 0'],0,'Fluks panas q = −k·uₓ; tidak ada aliran berarti uₓ = 0 (tipe Neumann).'],
+[7,'Easy','|3 + 4i| = …',null,5,'√(3² + 4²) = 5.'],
+[7,'Medium','e^{iπ} sama dengan…',['−1','1','i','−i'],0,'Rumus Euler: cos π + i·sin π = −1.'],
+[7,'Hard','Residu f(z) = 1/(z(z − 1)) di z = 0 adalah…',null,-1,'Res = lim z→0 z·f(z) = 1/(0 − 1) = −1.'],
+[8,'Easy','Newton untuk f = x² − 9, x₀ = 5. Hitung x₁.',null,3.4,'x₁ = 5 − (25−9)/10 = 3,4.'],
+[8,'Easy','Euler: y′ = 2y, y(0) = 1, h = 0,1. Hitung y(0,1).',null,1.2,'y₁ = 1 + 0,1·(2·1) = 1,2.'],
+[8,'Medium','Orde galat global metode Runge–Kutta 4 adalah…',['O(h)','O(h²)','O(h⁴)','O(h⁵)'],2,'Galat global RK4 sebanding h⁴.'],
+[8,'Medium','Simpson 1/3 dengan n = 2 untuk ∫₀² x³ dx. Hasilnya?',null,4,'h=1: (1/3)[0 + 4·1 + 8] = 4, eksak karena Simpson tepat sampai polinom derajat 3.'],
+[8,'Medium','Skema FTCS untuk uₜ = α·uₓₓ stabil bila…',['r = αΔt/Δx² ≤ 1/2','r ≥ 1','r = 0 saja','selalu stabil'],0,'Analisis von Neumann: faktor amplifikasi |1 − 4r| ≤ 1 → r ≤ 1/2.'],
+[8,'Hard','Aturan trapesium n = 2 untuk ∫₀² x² dx. Berapa galat absolut terhadap nilai eksak 8/3?',null,.3333,'T = (1/2)[0 + 2·1 + 4] = 3; galat = 3 − 8/3 = 1/3 ≈ 0,3333.'],
+[9,'Easy','Rata-rata data 4, 6, 8, 10 adalah…',null,7,'(4+6+8+10)/4 = 7.'],
+[9,'Easy','Pada distribusi normal, kira-kira berapa persen data berada dalam μ ± 2σ?',['68%','95%','99,7%','50%'],1,'Aturan empiris: 68% (1σ), 95% (2σ), 99,7% (3σ).'],
+[9,'Medium','E[X] = 3 dan E[X²] = 13. Berapa simpangan baku σ?',null,2,'Var = 13 − 3² = 4, σ = 2.'],
+[9,'Medium','Dua dadu adil dilempar. Peluang jumlah mata = 7? (desimal)',null,.1667,'Ada 6 dari 36 kemungkinan: 6/36 ≈ 0,1667.'],
+[9,'Medium','Rata-rata n pengukuran independen mengecilkan galat standar dengan faktor…',['1/√n','1/n','1/n²','tidak berubah'],0,'σ_rata-rata = σ/√n.'],
+[9,'Hard','P(A) = 0,3, P(B) = 0,5, A dan B independen. P(A ∪ B)?',null,.65,'0,3 + 0,5 − 0,3·0,5 = 0,65.'],
+[10,'Easy','Nilai minimum f(x) = (x − 3)² + 2 adalah…',null,2,'Minimum di x = 3 dengan f = 2.'],
+[10,'Easy','Pada gradient descent, bila laju belajar α terlalu besar maka…',['iterasi dapat divergen','selalu konvergen lebih cepat','berhenti di maksimum','tidak ada perubahan'],0,'Langkah melewati lembah dan bisa makin menjauh bila α > 2/κ.'],
+[10,'Medium','Gradient descent untuk f = x², α = 0,1, x₀ = 5. Hitung x₁.',null,4,'x₁ = 5 − 0,1·(2·5) = 4.'],
+[10,'Medium','Pada metode Lagrange dengan batasan g(x) = c, di titik optimum berlaku…',['∇f = λ∇g','∇f = 0','∇g = 0','f = g'],0,'Gradient f sejajar gradient batasan.'],
+[10,'Medium','Maksimalkan xy dengan syarat x + y = 8. Nilai maksimumnya?',null,16,'x = y = 4 sehingga xy = 16.'],
+[10,'Hard','f = ½(x² + 10y²). Gradient descent stabil jika α < 2/κ. Berapa batas α?',null,.2,'Hessian punya eigenvalue 1 dan 10, κ = 10, jadi α < 2/10 = 0,2.']);
+
+/* ===== ALUR BELAJAR ===== */
+const PRQ={0:[[],'turunan, integral, dan deret dasar'],6:[[],'vektor dan matriks dasar'],1:[[0,6],'turunan parsial, integral lipat, serta dot/cross product'],2:[[0],'integral, turunan, dan deret Taylor'],7:[[0],'fungsi, deret, dan integral'],3:[[2,7],'ODE dan integral tak wajar; bilangan kompleks dasar membantu memahami pole'],4:[[0,3],'integral trigonometri dan deret; konsepnya mirip Laplace'],5:[[2,4,1],'ODE, deret Fourier, dan operator laplacian'],8:[[0,2,6],'deret Taylor, ODE, dan sistem persamaan linear'],9:[[0,6],'integral dan matriks (untuk kovarians)'],10:[[0,6],'gradient, serta matriks Hessian dan eigenvalue']};
+const ORD=[0,6,1,2,7,3,4,5,8,9,10];
+function jl(){put(`<div class="hero" style="background:linear-gradient(135deg,#10b981,#0ea5e9 55%,#7c3aed)"><h2>Alur Belajar</h2><p>Urutan modul yang disarankan beserta prasyaratnya. Bar menunjukkan progresmu saat ini; peringatan muncul bila prasyarat masih di bawah 40%.</p></div>${ORD.map((i,n)=>{const[pr,why]=PRQ[i],pg=Math.round(prog(i)),low=pr.filter(j=>prog(j)<40);return`<div class="c" style="border-left:6px solid ${M[i].c}"><div class="row" style="justify-content:space-between"><h3 style="margin:0;color:${M[i].c}">${n+1}. ${M[i].n}</h3><button class="b" onclick="go(${i})">Buka modul</button></div><p class="mu" style="margin:6px 0">${pr.length?'Prasyarat: <b>'+pr.map(j=>M[j].n).join(', ')+'</b>. Yang dipakai: '+why+'.':'Titik awal: '+why+'.'}</p><div style="height:8px;background:var(--bd);border-radius:6px;overflow:hidden"><div style="height:100%;width:${pg}%;background:${M[i].c}"></div></div><div class="mu" style="font-size:.85rem">Progres ${pg}%</div>${low.length?`<div class="rd" style="background:#fef3c7;border-color:#f59e0b;color:#78350f;margin-top:8px">Disarankan selesaikan dulu: ${low.map(j=>M[j].n).join(', ')}.</div>`:''}</div>`}).join('')}`)}
+
+/* ===== EKSPOR / IMPOR PROGRES ===== */
+const se0=se;se=function(){se0();put(`<div class="c"><h3>Cadangan progres</h3><p class="mu">Progres tersimpan di browser ini saja. Ekspor ke file untuk berpindah perangkat atau berjaga-jaga bila data browser terhapus.</p><div class="row"><button class="b p" onclick="expP()">Ekspor progres (.json)</button><label class="b" style="cursor:pointer">Impor progres<input type="file" accept=".json,application/json" style="display:none" onchange="impP(this.files[0])"></label></div><p id="impm" class="mu"></p></div>`)};
+function expP(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='progres-aem-hub-'+new Date().toISOString().slice(0,10)+'.json';a.click()}
+function impP(f){if(!f)return;const r=new FileReader(),m=t=>{const e=$('#impm');if(e)e.textContent=t};r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||typeof o!=='object'||Array.isArray(o)||!('sc' in o||'sub' in o))throw 0;Object.keys(S).forEach(k=>delete S[k]);Object.assign(S,{sub:{},min:{},sc:{},notes:{},bm:[],goal:10,theme:'',fcw:{}},o);save();applyTheme();m('Progres berhasil diimpor.');setTimeout(render,600)}catch(e){m('File tidak valid: pilih file .json hasil ekspor aplikasi ini.')}};r.readAsText(f)}
 /* ===== STATE ===== */
 const K='aem-hub-v1';let S={sub:{},min:{},sc:{},notes:{},bm:[],goal:10,theme:''};
 try{Object.assign(S,JSON.parse(localStorage.getItem(K)||'{}'))}catch(e){}
@@ -482,10 +528,10 @@ let view='ov',charts=[];const applyTheme=()=>{if(S.theme)document.documentElemen
 const at=s=>s.replace(/&/g,'&amp;');
 function mj(){document.querySelectorAll('[data-t]').forEach(e=>{try{katex.render(e.dataset.t,e,{output:'mathml',displayMode:true,throwOnError:false})}catch(x){e.textContent=e.dataset.t}})}
 /* ===== SIDEBAR ===== */
-const NAV=[['ov','Overview'],['cs','Cheat Sheet'],['gl','Kamus Simbol'],['kn','Konstanta & Tabel'],['vz','Visualisasi'],['v2','Visualisasi 2D'],['v3','Visualisasi 3D'],['ae','Aerospace 3D'],['qz','Latihan & Quiz'],['fc','Flashcard'],['st','Study Tools'],['se','Pengaturan']];
+const NAV=[['ov','Overview'],['jl','Alur Belajar'],['cs','Cheat Sheet'],['gl','Kamus Simbol'],['kn','Konstanta & Tabel'],['vz','Visualisasi'],['v2','Visualisasi 2D'],['v3','Visualisasi 3D'],['ae','Aerospace 3D'],['qz','Latihan & Quiz'],['fc','Flashcard'],['st','Study Tools'],['se','Pengaturan']];
 function side(){$('#side').innerHTML='<h1>Engineering Math Hub</h1>'+NAV.map(([k,t])=>`<button class="${view==k?'on':''}" onclick="go('${k}')">${t}</button>`).join('')+'<div class="sep"></div>'+M.map((m,i)=>`<button class="${view=='m'+i?'on':''}" onclick="go('m${i}')"><span class="dot" style="background:${m.c}"></span>${m.n}</button>`).join('')}
 function go(v){view=v;qz=null;render();scrollTo(0,0)}
-function render(){charts.forEach(c=>c.destroy());charts=[];side();const f={ov,cs,gl,kn,vz,v2,v3,ae,qz:quiz,fc,st,se}[view]||mod;$('#main').innerHTML='';f();mj();emStart()}
+function render(){charts.forEach(c=>c.destroy());charts=[];side();const f={ov,jl,cs,gl,kn,vz,v2,v3,ae,qz:quiz,fc,st,se}[view]||mod;$('#main').innerHTML='';f();mj();emStart()}
 const put=h=>$('#main').insertAdjacentHTML('beforeend',h);
 /* ===== OVERVIEW ===== */
 function streak(){let n=0;for(const d of days(60).reverse()){if(S.min[d]>0)n++;else if(d!=td())break}return n}
