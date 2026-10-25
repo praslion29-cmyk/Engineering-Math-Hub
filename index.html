@@ -631,10 +631,10 @@ let view='ov',charts=[];const applyTheme=()=>{if(S.theme)document.documentElemen
 const at=s=>s.replace(/&/g,'&amp;');
 function mj(){document.querySelectorAll('[data-t]').forEach(e=>{try{katex.render(e.dataset.t,e,{output:'mathml',displayMode:true,throwOnError:false})}catch(x){e.textContent=e.dataset.t}})}
 /* ===== SIDEBAR ===== */
-const NAV=[['ov','Overview'],['jl','Alur Belajar'],['cs','Cheat Sheet'],['gl','Kamus Simbol'],['kn','Konstanta & Tabel'],['vz','Visualisasi'],['v2','Visualisasi 2D'],['v3','Visualisasi 3D'],['ae','Aerospace 3D'],['qz','Latihan & Quiz'],['fc','Flashcard'],['st','Study Tools'],['se','Pengaturan']];
+const NAV=[['ov','Overview'],['jl','Alur Belajar'],['cs','Cheat Sheet'],['kr','Peta 6 Lapis'],['gl','Kamus Simbol'],['kn','Konstanta & Tabel'],['vz','Visualisasi'],['v2','Visualisasi 2D'],['v3','Visualisasi 3D'],['ae','Aerospace 3D'],['qz','Latihan & Quiz'],['fc','Flashcard'],['st','Study Tools'],['se','Pengaturan']];
 function side(){$('#side').innerHTML='<h1>Engineering Math Hub</h1>'+NAV.map(([k,t])=>`<button class="${view==k?'on':''}" onclick="go('${k}')">${t}</button>`).join('')+'<div class="sep"></div>'+M.map((m,i)=>`<button class="${view=='m'+i?'on':''}" onclick="go('m${i}')"><span class="dot" style="background:${m.c}"></span>${m.n}</button>`).join('')}
 function go(v){view=v;qz=null;render();scrollTo(0,0)}
-function render(){charts.forEach(c=>c.destroy());charts=[];side();const f={ov,jl,cs,gl,kn,vz,v2,v3,ae,qz:quiz,fc,st,se}[view]||mod;$('#main').innerHTML='';f();mj();emStart();dgDraw()}
+function render(){charts.forEach(c=>c.destroy());charts=[];side();const f={ov,jl,kr,cs,gl,kn,vz,v2,v3,ae,qz:quiz,fc,st,se}[view]||mod;$('#main').innerHTML='';f();mj();emStart();dgDraw()}
 const put=h=>$('#main').insertAdjacentHTML('beforeend',h);
 /* ===== OVERVIEW ===== */
 function streak(){let n=0;for(const d of days(60).reverse()){if(S.min[d]>0)n++;else if(d!=td())break}return n}
@@ -659,6 +659,9 @@ function mod(){const i=+view.slice(1),m=M[i];
 put(`<div class="hero" style="background:linear-gradient(135deg,${m.c},${m.c}99)"><h2>${m.n}</h2><p>${m.sum}</p></div>
 <div class="c"><h3>Subtopik</h3>${m.subs.map((s,j)=>`<div class="row" style="justify-content:space-between"><span>${s}</span><select onchange="S.sub['${i}-${j}']=+this.value;save()">${ST.map((t,k)=>`<option value="${k}" ${(S.sub[i+'-'+j]||0)==k?'selected':''}>${t}</option>`).join('')}</select></div>`).join('')}</div>
 <div class="c"><h3>Rumus penting</h3>${m.f.map(f=>`<div><b>${f[0]}</b><div class="fm" data-t="${at(f[2])}"></div>${rd(i,f[0])}</div>`).join('')}</div>
+${kcard(i)}
+${krlab(i)}
+${krref(i)}
 ${vizCard(i)}
 ${D[i]?`<div class="c"><h3>Asal-usul rumus (turunan)</h3>${D[i].map(d=>`<details><summary>${d[0]}</summary><p>${d[1]}</p></details>`).join('')}</div>`:''}
 ${X[i]?`<div class="c"><h3>Kamus simbol modul ini</h3>${gloss(i)}</div>`:''}
@@ -666,6 +669,112 @@ ${m.ex?`<div class="c"><h3>Contoh soal</h3>${m.ex.map(e=>`<details><summary>${e[
 ${CS[i]?`<div class="c"><h3>Studi kasus teknik berangka: ${CS[i][0]}</h3><p>${CS[i][1]}</p></div>`:''}
 <div class="c"><h3>Aplikasi di teknik</h3><p>${m.app}</p>${(X[i]?X[i].a:[]).map(a=>`<div class="ap" style="border-color:${m.c}"><b>${a[0]}</b><p>${a[1]}</p></div>`).join('')}${m.err?`<h3>Kesalahan umum</h3><p>${m.err}</p>`:''}</div>
 <div class="c"><h3>Catatan pribadi</h3><textarea oninput="S.notes[${i}]=this.value;save()">${S.notes[i]||''}</textarea></div>`)}
+/* ===== KERANGKA 6 LAPIS: concept → mathematical → computational → engineering → critical → research ===== */
+const KRL=[['Concept','Konsep','#6366f1','Ide inti dan intuisi fisis: apa yang diukur atau dimodelkan?'],['Mathematical','Matematis','#0ea5e9','Rumus, asumsi, dan syarat berlakunya.'],['Computational Method','Metode Komputasi','#10b981','Algoritma numerik, kompleksitas, dan sumber galat.'],['Engineering Application','Aplikasi Teknik','#f59e0b','Masalah teknik nyata yang diselesaikan.'],['Critical Interpretation','Interpretasi Kritis','#ec4899','Batas model, jebakan, dan cara memeriksa hasil.'],['Research Connection','Koneksi Riset','#7c3aed','Topik riset modern yang tumbuh dari konsep ini.']];
+const LX=String.raw;
+const KRK=[
+[['Perubahan multivariabel: turunan parsial menahan variabel lain, integral lipat menjumlah kontribusi kecil.',LX`\iint_R f\,dA=\int\!\!\int f(r\cos\theta,r\sin\theta)\,r\,dr\,d\theta`],'Syarat: f kontinu pada R; ganti variabel butuh Jacobian. Taylor hanya lokal di sekitar a.','Kuadratur Gauss atau Monte Carlo untuk integral lipat; diferensiasi otomatis (autodiff) untuk turunan. Galat Monte Carlo turun O(1/√N) dan tidak bergantung dimensi.','Pusat massa, momen inersia, dan distribusi tegangan penampang balok.','Taylor orde rendah hanya valid dekat titik ekspansi. Cek dengan membandingkan orde n dan n+1 serta kasus yang punya jawaban eksak (luas lingkaran).','Autodiff pada deep learning, quasi-Monte Carlo, dan integrasi berdimensi tinggi.'],
+[['Medan skalar dan vektor: gradient = arah naik tercepat, divergence = sumber, curl = putaran.',LX`\oint_C F\cdot dr=\iint_D\left(\tfrac{\partial Q}{\partial x}-\tfrac{\partial P}{\partial y}\right)dA`],'Green, Stokes, dan Gauss butuh batas tertutup mulus dan F yang terdiferensial di dalam daerah.','Beda hingga pusat untuk ∇, ∇·, ∇×; metode volume hingga yang menjaga kekekalan fluks. Galat pemotongan O(h²).','Aliran fluida, medan listrik-magnet (Maxwell), perpindahan panas konduksi.','Divergence nol belum berarti aliran tak berputar. Periksa satuan, orientasi kontur, dan konservasi fluks numerik.','CFD volume hingga dan physics-informed neural networks (PINN).'],
+[['Model perubahan terhadap waktu: keadaan sekarang menentukan laju perubahan.',LX`\ddot x+2\zeta\omega_n\dot x+\omega_n^2x=0`],'Linear, koefisien konstan; ζ menentukan teredam lebih, kritis, atau kurang. Eksistensi-ketunggalan butuh f Lipschitz.','Euler (orde 1), RK4 (orde 4, galat global O(h⁴)); untuk sistem stiff pakai metode implisit (BDF).','Suspensi kendaraan, rangkaian RLC, dinamika pesawat, reaktor kimia.','Model linear gagal untuk amplitudo besar. Uji kestabilan numerik: h yang terlalu besar membuat solusi meledak walau ODE stabil.','Neural ODE, identifikasi sistem (SINDy), dan kontrol prediktif.'],
+[['Mengubah ODE menjadi aljabar di domain s; kondisi awal masuk otomatis.',LX`\mathcal L\{f'\}=sF(s)-f(0)`],'Perlu f eksponensial-terbatas agar integral konvergen (s>a); invers butuh pecahan parsial.','Invers numerik (Talbot, Stehfest) dan fungsi alih lewat scipy.signal; hati-hati karena inversi numerik sensitif terhadap galat.','Fungsi alih sistem kontrol, analisis rangkaian, respons transien.','Pole di setengah bidang kanan berarti tak stabil. Domain s tidak memperlihatkan keterlambatan murni dengan baik tanpa aproksimasi Padé.','Kontrol robust (H∞), model orde pecahan, dan reduksi model.'],
+[['Sinyal = jumlah gelombang sinus-kosinus; spektrum menunjukkan energi tiap frekuensi.',LX`f(x)=\frac{a_0}{2}+\sum_{n=1}^{\infty}\left(a_n\cos\tfrac{n\pi x}{L}+b_n\sin\tfrac{n\pi x}{L}\right)`],'Syarat Dirichlet; di titik lompat deret konvergen ke rata-rata kiri-kanan (Gibbs sekitar 9%).','FFT berkompleksitas O(N log N) dibanding O(N²); perhatikan Nyquist fs>2fmax, windowing, dan kebocoran spektral.','Analisis getaran, filter sinyal, kompresi audio-citra, spektroskopi.','Aliasing menghasilkan frekuensi palsu. Spektrum dari data pendek memberi resolusi buruk: Δf=1/T.','Compressed sensing, wavelet, dan analisis waktu-frekuensi.'],
+[['Persamaan yang melibatkan banyak variabel bebas: panas (parabolik), gelombang (hiperbolik), Laplace (elips).',LX`u_t=\alpha u_{xx}`],'Perlu kondisi awal dan batas; pemisahan variabel menghasilkan deret Fourier mode eigen.','Beda hingga FTCS stabil bila r=αΔt/Δx²≤½; elemen hingga untuk geometri rumit; Crank–Nicolson stabil tanpa syarat.','Distribusi suhu, getaran struktur, difusi polutan, aliran bawah tanah.','Skema tidak stabil menghasilkan osilasi liar. Verifikasi dengan konservasi energi dan uji konvergensi mesh.','Elemen hingga adaptif, reduced-order model, dan neural operator.'],
+[['Transformasi linear: eigenvector arahnya tetap, hanya diskalakan oleh eigenvalue.',LX`A\mathbf v=\lambda\mathbf v`],'Diagonalisasi butuh cukup eigenvector bebas linear; matriks simetris punya eigenvalue riil dan vektor ortogonal.','Eliminasi Gauss O(n³), dekomposisi LU/QR/SVD, iterasi pangkat. Perhatikan nomor kondisi κ(A).','Mode getar struktur, PCA, kestabilan sistem, grafik komputer.','Matriks berkondisi buruk memperbesar galat. Jangan menghitung A⁻¹ eksplisit; selesaikan Ax=b langsung.','Randomized SVD, aljabar linear skala besar, dan quantum linear algebra.'],
+[['Fungsi bilangan kompleks yang analitik: sifatnya kaku dan memetakan sudut (konformal).',LX`\oint_C f(z)\,dz=2\pi i\sum \operatorname{Res}`],'Cauchy–Riemann untuk analitik; teorema residu butuh kontur tertutup dan singularitas terisolasi.','Evaluasi residu simbolik, integrasi kontur numerik, dan akar polinom lewat matriks pendamping.','Aliran potensial di sekitar sayap (Joukowski), integral real sulit, analisis kestabilan.','Cabang fungsi (log, akar) membuat nilai berubah di sepanjang kontur. Periksa pole yang masuk kontur.','Pemetaan konformal dalam mesh generation dan teori operator.'],
+[['Aproksimasi solusi saat jawaban eksak tak ada atau terlalu mahal.',LX`x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}`],'Newton konvergen kuadratik jika tebakan dekat akar dan f′≠0; Simpson butuh jumlah interval genap.','Pilih metode berdasar orde, biaya, dan stabilitas; analisis galat pemotongan vs pembulatan.','Akar persamaan nonlinear, integrasi data eksperimen, simulasi dinamika.','Konvergensi tidak dijamin. Selalu laporkan toleransi, jumlah iterasi, dan uji dengan kasus berjawaban diketahui.','Metode spektral, komputasi presisi campuran, dan kuantifikasi galat.'],
+[['Ketidakpastian dan data: peubah acak, distribusi, estimasi, dan korelasi.',LX`\bar x\pm z\frac{\sigma}{\sqrt n}`],'Teorema limit pusat butuh sampel independen berukuran memadai; ÷(N−1) untuk varians sampel.','Simulasi Monte Carlo, bootstrap, dan regresi kuadrat terkecil lewat QR.','Kendali mutu, reliabilitas komponen, kalibrasi sensor, toleransi manufaktur.','Korelasi bukan kausalitas. Periksa outlier, asumsi normalitas, dan ukuran efek, bukan hanya nilai p.','Bayesian inference, kuantifikasi ketidakpastian, dan machine learning.'],
+[['Mencari variabel terbaik di bawah kendala: turun searah −∇f hingga ∇f=0.',LX`x_{k+1}=x_k-\alpha\nabla f(x_k)`],'Titik stasioner belum tentu minimum: periksa Hessian. Konveksitas menjamin minimum global.','Gradient descent, Newton, simpleks untuk LP; pilih α dengan line search agar tidak divergen.','Desain struktur ringan, penjadwalan, kontrol optimal, kalibrasi model.','Minimum lokal menipu pada fungsi non-konveks. Uji beberapa tebakan awal dan periksa kendala aktif.','Optimasi stokastik (Adam), optimasi konveks, dan desain berbasis surrogate.'],
+[['Dinamika benda di ruang angkasa: gravitasi sentral, orbit Kepler, dan manuver impuls.',LX`v=\sqrt{\mu\left(\tfrac{2}{r}-\tfrac{1}{a}\right)}`],'Masalah dua benda dengan gaya sentral; Hohmann mengasumsikan orbit koplanar dan impuls seketika.','Persamaan Kepler diselesaikan dengan Newton; propagasi orbit dengan RK4 atau integrator simplektik.','Perencanaan transfer orbit, penentuan sikap satelit, jendela peluncuran.','Gangguan nyata (J2, hambatan atmosfer, bulan) menggeser orbit. Model dua benda hanya aproksimasi awal.','Trajektori low-thrust, navigasi otonom, dan estimasi sikap (filter Kalman).']];
+const kc=(i,j)=>(S.k=S.k||{})[i+'-'+j];
+function kcard(i){const m=M[i],k=KRK[i];if(!k)return'';return`<div class="c" style="border-top-color:${m.c}"><h3>Kerangka 6 Lapis: dari konsep sampai koneksi riset</h3>${KRL.map((l,j)=>`<div class="ap" style="border-color:${l[2]}"><b>${j+1}. ${l[1]}</b> <span class="mu">(${l[0]})</span>${j==1?`<div class="fm" data-t="${at(k[0][1])}"></div><p>${k[1]}</p>`:`<p>${j==0?k[0][0]:k[j]}</p>`}<label><input type="checkbox" ${kc(i,j)?'checked':''} onchange="(S.k=S.k||{})['${i}-${j}']=this.checked?1:0;save()"> Saya bisa menjelaskan lapis ini</label></div>`).join('')}</div>`}
+function kr(){put(`<div class="hero" style="background:linear-gradient(135deg,#6366f1,#ec4899)"><h2>Peta 6 Lapis</h2><p>Tiap modul dipelajari lewat enam lapis: konsep, matematis, metode komputasi, aplikasi teknik, interpretasi kritis, dan koneksi riset. Centang lapis yang sudah kamu kuasai.</p></div><div class="c"><h3>Legenda</h3>${KRL.map((l,j)=>`<div class="ap" style="border-color:${l[2]}"><b>${j+1}. ${l[1]}</b> <span class="mu">(${l[0]})</span><p>${l[3]}</p></div>`).join('')}</div><div class="c" style="overflow-x:auto"><h3>Progres per modul</h3><table class="tb"><tr><th>Modul</th>${KRL.map((l,j)=>`<th>${j+1}</th>`).join('')}<th>%</th></tr>${M.map((m,i)=>{const d=KRL.filter((_,j)=>kc(i,j)).length;return`<tr style="cursor:pointer" onclick="go('m${i}')"><td style="color:${m.c}"><b>${m.n}</b></td>${KRL.map((_,j)=>`<td>${kc(i,j)?'✓':'·'}</td>`).join('')}<td>${Math.round(d/6*100)}%</td></tr>`}).join('')}</table></div>`)}
+/* ===== LAB KOMPUTASI + DISKUSI KRITIS ===== */
+const KRC=[
+`let N=200000,c=0;for(let i=0;i<N;i++){const x=Math.random()*2-1,y=Math.random()*2-1;if(x*x+y*y<=1)c++}
+out('Monte Carlo π ≈',4*c/N,'| galat',Math.abs(4*c/N-Math.PI).toExponential(2),'(≈1/√N)');
+let s=0,t=1;for(let n=0;n<=7;n++){if(n)t*=1/((2*n)*(2*n+1));s+=(n%2?-1:1)*(n?t:1);out('Taylor sin(1) suku',n+1,'=',s,'galat',Math.abs(s-Math.sin(1)).toExponential(1))}`,
+`const F=(x,y)=>[x*x,y*y],h=1e-3,x=1,y=2;
+const d=(F(x+h,y)[0]-F(x-h,y)[0])/(2*h)+(F(x,y+h)[1]-F(x,y-h)[1])/(2*h);
+out('div F numerik =',d,'| eksak = 2x+2y =',2*x+2*y);
+for(const hh of [.1,.01,.001]){const e=Math.abs((F(x+hh,y)[0]-F(x-hh,y)[0])/(2*hh)-2*x);out('h =',hh,'galat',e.toExponential(1))}`,
+`const f=(t,y)=>-2*y,ex=Math.exp(-2);
+for(const h of [.2,.1,.05]){let ye=1,yr=1;const n=Math.round(1/h);
+for(let i=0;i<n;i++){const t=i*h;ye+=h*f(t,ye);const k1=f(t,yr),k2=f(t,yr+h*k1/2),k3=f(t,yr+h*k2/2),k4=f(t,yr+h*k3);yr+=h*(k1+2*k2+2*k3+k4)/6}
+out('h='+h,'galat Euler',Math.abs(ye-ex).toExponential(2),'| galat RK4',Math.abs(yr-ex).toExponential(2))}
+out('Halving h: Euler galat ÷2 (orde 1), RK4 galat ÷16 (orde 4)')`,
+`const s=2,T=60,n=60000,dt=T/n;let I=0;
+for(let i=0;i<=n;i++){const t=i*dt,w=(i==0||i==n)?.5:1;I+=w*Math.exp(-s*t)*Math.sin(t)*dt}
+out('ℒ{sin t}(s=2) numerik =',I,'| eksak 1/(s²+1) =',1/(s*s+1));
+out('Coba s=0.1: integral butuh T besar karena e^{-st} meluruh lambat')`,
+`const sq=(x,N)=>{let a=0;for(let n=1;n<=N;n+=2)a+=Math.sin(n*x)/n;return 4/Math.PI*a};
+for(const N of [11,51,201,1001]){let m=0;for(let i=1;i<20000;i++){m=Math.max(m,sq(i/20000*Math.PI/2,N))}out('N =',N,'puncak =',m.toFixed(4))}
+out('Puncak tetap ≈1.179 (Gibbs ≈ 9% dari lompatan 2); hanya posisinya menyempit')`,
+`function run(r,steps){const n=21,u=Array.from({length:n},(_,i)=>Math.sin(Math.PI*i/(n-1)));
+for(let k=0;k<steps;k++){const v=u.slice();for(let i=1;i<n-1;i++)v[i]=u[i]+r*(u[i+1]-2*u[i]+u[i-1]);v[0]=v[n-1]=0;u.splice(0,n,...v)}
+return Math.max(...u.map(Math.abs))}
+out('r = 0.4 → max|u| =',run(.4,200).toExponential(3),'(meluruh, stabil)');
+out('r = 0.6 → max|u| =',run(.6,200).toExponential(3),'(meledak, tak stabil)');
+out('Solusi eksak mode pertama: e^{-π²t} dengan t = r·Δx²·langkah')`,
+`const A=[[2,1],[1,3]];let v=[1,1],lam=0;
+for(let k=1;k<=25;k++){const w=[A[0][0]*v[0]+A[0][1]*v[1],A[1][0]*v[0]+A[1][1]*v[1]];lam=Math.hypot(...w);v=w.map(x=>x/lam);
+if(k<=5||k==25)out('iterasi',k,'λ ≈',lam.toFixed(6))}
+out('Eksak (5+√5)/2 =',(5+Math.sqrt(5))/2,'| vektor',v.map(x=>x.toFixed(4)).join(', '));
+out('κ(A) = λmax/λmin =',((5+Math.sqrt(5))/(5-Math.sqrt(5))).toFixed(3))`,
+`let re=0,im=0;const n=4000;
+for(let k=0;k<n;k++){const t=2*Math.PI*k/n;re+=Math.exp(Math.cos(t))*Math.cos(Math.sin(t))*2*Math.PI/n;im+=Math.exp(Math.cos(t))*Math.sin(Math.sin(t))*2*Math.PI/n}
+out('∮ e^z/z dz pada |z|=1 = i·∫e^z dt = ',(-im).toFixed(6),'+',re.toFixed(6),'i');
+out('Teorema residu: 2πi·Res = 2πi → 0 +',(2*Math.PI).toFixed(6),'i')`,
+`let x=1;const f=x=>x*x-2,df=x=>2*x,r=Math.SQRT2;
+for(let k=1;k<=6;k++){x=x-f(x)/df(x);out('iterasi',k,'x =',x.toPrecision(16),'galat',Math.abs(x-r).toExponential(2))}
+out('Galat kira-kira dikuadratkan tiap iterasi = konvergensi kuadratik');
+let a=0,b=1;const g=x=>Math.exp(-x*x);let S=g(a)+g(b);const N=10,h=(b-a)/N;for(let i=1;i<N;i++)S+=(i%2?4:2)*g(a+i*h);out('Simpson ∫₀¹e^{-x²} =',S*h/3,'(eksak 0.7468241328)')`,
+`const N=30,M=20000;let m1=0,m2=0;
+for(let k=0;k<M;k++){let s=0;for(let i=0;i<N;i++)s+=Math.random();s/=N;m1+=s;m2+=s*s}
+m1/=M;const sd=Math.sqrt(m2/M-m1*m1);
+out('rata-rata =',m1.toFixed(4),'(teori 0.5)');out('simpangan baku =',sd.toFixed(4),'(teori √(1/12/30) =',Math.sqrt(1/12/N).toFixed(4)+')');
+out('Interval 95% sampel ≈',(m1-1.96*sd).toFixed(3),'..',(m1+1.96*sd).toFixed(3))`,
+`const gd=a=>{let x=1,y=1;for(let k=0;k<100;k++){const gx=2*x,gy=20*y;x-=a*gx;y-=a*gy}return Math.hypot(x,y)};
+out('f = x²+10y², L = 20 → batas α < 2/L = 0.1');
+for(const a of [.01,.05,.09,.11])out('α =',a,'→ |x| setelah 100 langkah =',gd(a).toExponential(2));
+out('α kecil: lambat; α mendekati 2/L: berosilasi; α>2/L: divergen')`,
+`const mu=398600.4418,r1=6378.137+400,r2=42164,a=(r1+r2)/2;
+const M=1,e=.6;let E=M;for(let k=0;k<6;k++){E-=(E-e*Math.sin(E)-M)/(1-e*Math.cos(E));out('Kepler Newton iter',k+1,'E =',E.toFixed(10))}
+const v1=Math.sqrt(mu/r1),v2=Math.sqrt(mu/r2),vp=Math.sqrt(mu*(2/r1-1/a)),va=Math.sqrt(mu*(2/r2-1/a));
+out('Δv1 =',(vp-v1).toFixed(3),'km/s | Δv2 =',(v2-va).toFixed(3),'km/s | total =',(vp-v1+v2-va).toFixed(3),'km/s');
+out('Waktu transfer =',(Math.PI*Math.sqrt(a**3/mu)/3600).toFixed(2),'jam')`
+];
+const KRQ=[
+['Kapan deret Taylor orde-3 cukup, dan bagaimana kamu membuktikannya, bukan menebak?','Mengapa galat Monte Carlo tidak memburuk di dimensi tinggi, padahal kuadratur grid memburuk (curse of dimensionality)?'],
+['Medan dengan div F = 0 di mana-mana: apakah pasti tak ada sumber? Beri contoh singularitas yang menipu.','Skema volume hingga menjaga fluks sedangkan beda hingga biasa tidak. Kapan perbedaan itu menentukan hasil?'],
+['Mengapa solusi eksak y′=−2y stabil sementara Euler dengan h>1 meledak? Turunkan batas h-nya.','Kapan sistem disebut stiff, dan mengapa RK4 mahal sekali untuknya?'],
+['Pole di s=+0.001 praktis di sumbu imajiner, tetapi tetap tak stabil. Bagaimana kamu menjelaskannya ke manajer proyek?','Kenapa inversi Laplace numerik sensitif terhadap galat data meski transformasinya halus?'],
+['Mengapa Gibbs tidak hilang saat N→∞? Apa yang berubah, dan filter apa yang mengurangi dampaknya?','Sinyal 1 detik dengan fs=1000 Hz: berapa resolusi frekuensi, dan bagaimana memperbaikinya?'],
+['Bagaimana memverifikasi solusi PDE numerik bila tidak ada solusi eksak (manufactured solution, uji konvergensi mesh)?','Mengapa skema implisit stabil tanpa syarat tetapi masih bisa tidak akurat?'],
+['Matriks dengan κ(A)=10¹⁰: berapa digit yang masih bisa dipercaya pada presisi double?','Mengapa PCA memakai SVD, bukan eigen-dekomposisi langsung dari matriks kovarians?'],
+['Bagaimana memilih cabang log(z) agar integral kontur tetap benar? Beri contoh yang salah bila diabaikan.','Kapan metode residu lebih baik daripada integrasi numerik langsung?'],
+['Newton gagal untuk f(x)=x^{1/3} dari tebakan mana pun. Mengapa, dan apa metode cadangannya (bisection, Brent)?','Bagaimana memisahkan galat pemotongan dari galat pembulatan pada beda hingga dengan h sangat kecil?'],
+['Nilai p<0.05 pada n=100000: apa yang masih perlu kamu laporkan selain itu?','Kapan asumsi normal pada interval kepercayaan berbahaya (data berekor berat)?'],
+['Bagaimana mengetahui hasil optimasi minimum global, bukan lokal, pada fungsi non-konveks?','Mengapa preconditioning mempercepat gradient descent pada lembah sempit seperti x²+10y²?'],
+['Seberapa besar galat posisi bila J2 diabaikan selama 1 hari di LEO, dan bagaimana mengujinya?','Mengapa integrator simplektik menjaga energi orbit lebih baik daripada RK4 untuk simulasi jangka panjang?']
+];
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function krun(i){const o=[],out=(...a)=>o.push(a.join(' '));const el=document.getElementById('kcc'+i);try{new Function('out',el.value)(out)}catch(e){o.push('Galat: '+e.message)}document.getElementById('kco'+i).textContent=o.join('\n')}
+function krlab(i){if(!KRC[i])return'';return`<div class="c" style="border-top-color:${M[i].c}"><h3>Lab komputasi (bisa diedit dan dijalankan)</h3><p class="mu">Ubah angka di kode (h, N, α, tebakan awal) lalu jalankan. Amati bagaimana galat dan kestabilan berubah.</p><textarea id="kcc${i}" spellcheck="false" style="width:100%;min-height:190px;font-family:monospace;font-size:.82rem">${esc(KRC[i])}</textarea><div class="row"><button class="b" onclick="krun(${i})">▶ Jalankan</button></div><pre class="aeo" id="kco${i}" style="white-space:pre-wrap">Tekan Jalankan untuk melihat hasil.</pre><h3>Pertanyaan diskusi kritis</h3>${KRQ[i].map(q=>`<details><summary>${q}</summary><p class="mu">Tulis jawabanmu di Catatan pribadi di bawah, lalu bandingkan dengan buku teks atau dosen.</p></details>`).join('')}</div>`}
+/* ===== BACAAN & RUJUKAN RISET ===== */
+const KRR=[
+['Stewart, Calculus (Cengage): bab turunan parsial dan integral lipat.','Kreyszig, Advanced Engineering Mathematics (Wiley).','Baydin, Pearlmutter, Radul, Siskind (2017). Automatic differentiation in machine learning: a survey. JMLR 18(153):1–43.'],
+['Marsden & Tromba, Vector Calculus (W.H. Freeman).','Schey, Div, Grad, Curl, and All That (W.W. Norton).','Raissi, Perdikaris, Karniadakis (2019). Physics-informed neural networks. J. Comput. Phys. 378:686–707.'],
+['Boyce & DiPrima, Elementary Differential Equations and Boundary Value Problems (Wiley).','Chen, Rubanova, Bettencourt, Duvenaud (2018). Neural Ordinary Differential Equations. NeurIPS.','Brunton, Proctor, Kutz (2016). Discovering governing equations from data by sparse identification of nonlinear dynamical systems. PNAS 113(15):3932–3937.'],
+['Ogata, Modern Control Engineering (Pearson).','Åström & Murray, Feedback Systems: An Introduction for Scientists and Engineers (Princeton University Press).','Kreyszig, Advanced Engineering Mathematics (Wiley): bab Transformasi Laplace.'],
+['Oppenheim & Willsky, Signals and Systems (Pearson).','Candès, Romberg, Tao (2006). Robust uncertainty principles. IEEE Trans. Inf. Theory 52(2):489–509.','Donoho (2006). Compressed sensing. IEEE Trans. Inf. Theory 52(4):1289–1306.'],
+['Strauss, Partial Differential Equations: An Introduction (Wiley).','Raissi, Perdikaris, Karniadakis (2019). Physics-informed neural networks. J. Comput. Phys. 378:686–707.','Hughes, The Finite Element Method (Dover): rujukan metode elemen hingga.'],
+['Strang, Linear Algebra and Its Applications (Cengage).','Trefethen & Bau, Numerical Linear Algebra (SIAM).','Halko, Martinsson, Tropp (2011). Finding structure with randomness. SIAM Review 53(2):217–288.'],
+['Brown & Churchill, Complex Variables and Applications (McGraw-Hill).','Kreyszig, Advanced Engineering Mathematics (Wiley): bab Analisis Kompleks.','Anderson, Fundamentals of Aerodynamics (McGraw-Hill): aplikasi transformasi Joukowski.'],
+['Burden & Faires, Numerical Analysis (Cengage).','Trefethen & Bau, Numerical Linear Algebra (SIAM).','Press dkk., Numerical Recipes (Cambridge University Press).'],
+['Walpole, Myers, Myers, Ye, Probability & Statistics for Engineers & Scientists (Pearson).','Efron (1979). Bootstrap methods: another look at the jackknife. Annals of Statistics 7(1):1–26.','Montgomery & Runger, Applied Statistics and Probability for Engineers (Wiley).'],
+['Boyd & Vandenberghe, Convex Optimization (Cambridge University Press, 2004).','Nocedal & Wright, Numerical Optimization (Springer).','Kingma & Ba (2015). Adam: A method for stochastic optimization. ICLR (arXiv:1412.6980).'],
+['Curtis, Orbital Mechanics for Engineering Students (Butterworth-Heinemann).','Vallado, Fundamentals of Astrodynamics and Applications (Microcosm/Springer).','Bate, Mueller, White, Fundamentals of Astrodynamics (Dover).']];
+const krref=i=>KRR[i]?`<div class="c" style="border-top-color:${M[i].c}"><h3>Bacaan dan rujukan riset</h3><ol>${KRR[i].map(r=>`<li>${r}</li>`).join('')}</ol><p class="mu">Tahun dan nomor halaman paper PINN sudah dicek di sumbernya; rujukan lain dari pengetahuan umum. Verifikasi edisi dan detail sitasi lewat perpustakaan atau Google Scholar sebelum dikutip di tugas.</p></div>`:'';
 /* ===== CHEAT SHEET ===== */
 const F=[].concat(...M.map((m,i)=>m.f.map(f=>({i,k:i+'|'+f[0],n:f[0],u:f[1],l:f[2]}))));
 function cs(){put(`<h2>Formula Cheat Sheet</h2><div class="row"><input id="q" placeholder="Cari rumus…" oninput="csl()"><select id="mf" onchange="csl()"><option value="">Semua modul</option>${M.map((m,i)=>`<option value="${i}">${m.n}</option>`).join('')}</select><label><input type="checkbox" id="bk" onchange="csl()"> Bookmark saja</label><button class="b" onclick="print()">Cetak / simpan PDF</button></div><div id="fl"></div>`);csl()}
